@@ -4,13 +4,14 @@
 {
     'name': 'Blink',
     'version': '1.0',
-    'category': 'Hidden',
+    'category': 'Sales/CRM',
     'summary': 'Quotation, Sales Orders, Delivery & Invoicing Control',
     'description': """
 Manage sales quotations and orders
 ==================================
 
 This module makes the link between the sales and warehouses management applications.
+
 
 Preferences
 -----------
