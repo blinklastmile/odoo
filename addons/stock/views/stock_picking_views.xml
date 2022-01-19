@@ -230,6 +230,7 @@
                 <field name="hide_picking_type" invisible="1"/>
                 <field name="show_operations" invisible="1" readonly="1"/>
                 <field name="show_allocation" invisible="1"/>
+                <field name="deliv_label" invisible="1"/>
                 <field name="show_reserved" invisible="1" readonly="1"/>
                 <field name="move_line_exist" invisible="1"/>
                 <field name="has_packages" invisible="1"/>
