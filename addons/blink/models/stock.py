@@ -8,4 +8,4 @@ from odoo import api, fields, models, _
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
-    deliv_label = fields.Char(related='sale_id.deliv_label')
+    deliv_label = fields.Char(related='group_id.sale_id.deliv_label')
