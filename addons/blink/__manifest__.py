@@ -20,7 +20,7 @@ Preferences
 * Incoterms: International Commercial terms
 
 """,
-    'depends': ['stock_account','sale'],
+    'depends': ['stock_account','sale','sale_stock'],
     'data': [
         'views/sale.xml',
         'views/picking.xml'
