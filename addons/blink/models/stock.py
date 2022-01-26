@@ -8,4 +8,5 @@ from odoo import api, fields, models, _
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
-    deliv_label = fields.Char(related='group_id.sale_id.deliv_label')
+    sale_id = fields.Many2one(related="group_id.sale_id", string="Sales Order", store=True, readonly=False)
+    deliv_label = fields.Char(related="sale_id.deliv_label")
