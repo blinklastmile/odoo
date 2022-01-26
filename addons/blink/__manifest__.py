@@ -22,7 +22,7 @@ Preferences
 """,
     'depends': ['stock_account'],
     'data': [
-        'views/picking.xml',
+        'views/sale.xml',
     ],
     'demo': [],
     'installable': True,
