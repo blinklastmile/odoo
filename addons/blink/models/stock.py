@@ -9,6 +9,4 @@ from odoo.tools.sql import column_exists, create_column
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
-    #sale_order = fields.Many2one(related="group_id.sale_id", string="Sales Order", store=True, readonly=False)
-
-    deliv_label = fields.Char()
+    deliv_label = fields.Char(related="sale_id.deliv_label",string="Label")
