@@ -10,3 +10,4 @@ class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
     deliv_label = fields.Char(related="sale_id.deliv_label",string="Label")
+    first_order = fields.Boolean('First Order',related="sale_id.first_order")
