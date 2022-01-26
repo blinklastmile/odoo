@@ -9,4 +9,4 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     deliv_label = fields.Char(string='Label')
-    first_order = fields.Boolean(string='First Order',default=False)
+    first_order = fields.Boolean('First Order',default=False)
