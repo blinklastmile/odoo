@@ -3,9 +3,11 @@
 
 
 from odoo import api, fields, models, _
+from odoo.tools.sql import column_exists, create_column
 
 
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
-    deliv_label = fields.Char(string='Label')
+    deliv_label = fields.Char(related="sale_id.deliv_label", string="Label")
+    first_order = fields.Boolean(related="sale_id.first_order",string='First Order')
