@@ -491,14 +491,27 @@ class HomeStaticTemplateHelpers(object):
             if re.match(COMMENT_PATTERN, comment.text.strip()):
                 comment.getparent().remove(comment)
 
-    def _read_addon_file(self, file_path):
-        """Reads the content of a file given by file_path
-        Usefull to make 'self' testable
-        :param str file_path:
-        :returns: str
+    def _read_addon_file(self, path_or_url):
+        """Read the content of a file or an ``ir.attachment`` record given by
+        ``path_or_url``.
+
+        :param str path_or_url:
+        :returns: bytes
+        :raises FileNotFoundError: if the path does not match a module file
+            or an attachment
         """
-        with file_open(file_path, 'rb') as fp:
-            contents = fp.read()
+        try:
+            with file_open(path_or_url, 'rb') as fp:
+                contents = fp.read()
+        except FileNotFoundError as e:
+            attachment = request.env['ir.attachment'].sudo().search([
+                ('url', '=', path_or_url),
+                ('type', '=', 'binary'),
+            ], limit=1)
+            if attachment:
+                contents = attachment.raw
+            else:
+                raise e
         return contents
 
     def _concat_xml(self, file_dict):
@@ -973,7 +986,7 @@ class WebClient(http.Controller):
         return {"modules": translations_per_module,
                 "lang_parameters": None}
 
-    @http.route('/web/webclient/translations/<string:unique>', type='http', auth="public")
+    @http.route('/web/webclient/translations/<string:unique>', type='http', auth="public", cors="*")
     def translations(self, unique, mods=None, lang=None):
         """
         Load the translations for the specified language and modules
