@@ -23,7 +23,8 @@ Preferences
     'depends': ['stock_account','sale','sale_stock'],
     'data': [
         'views/sale.xml',
-        'views/picking.xml'
+        'views/picking.xml',
+        'views/location.xml'
     ],
     'demo': [],
     'installable': True,
