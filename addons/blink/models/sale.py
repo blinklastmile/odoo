@@ -10,3 +10,4 @@ class SaleOrder(models.Model):
 
     deliv_label = fields.Char(string='Label')
     first_order = fields.Boolean('First Order',default=False)
+    source = fields.Char(string='Label')
