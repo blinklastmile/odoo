@@ -9,6 +9,7 @@
                 <field name="date_order" position="after">
                 		<field name="deliv_label" widget="url"/>
                 		<field name="first_order"/>
+                        <field name="source"/>
             	</field>
             </field>
         </record>
