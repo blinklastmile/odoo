@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 # Part of Blinklastmile. See LICENSE file for full copyright and licensing details.
-
+import logging
 
 from odoo import api, fields, models
 
+_logger = logging.getLogger(__name__)
 
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
@@ -13,16 +14,16 @@ class PurchaseOrder(models.Model):
         seller = purchase_order.partner_id[0]
         supplier_infos = self.env['product.supplierinfo'].search_read([])
         for supplier_info in supplier_infos:
-            isAlreadyInOrderLine = False
+            is_already_in_order_line = False
             if not supplier_info['name'][0] == seller.id:
                 continue
 
             product_tmpl = self.env['product.template'].browse(supplier_info['product_tmpl_id'][0])
             for orderline in purchase_order.order_line:
                 if orderline['product_id'] == product_tmpl['product_variant_id']:
-                    isAlreadyInOrderLine = True
+                    is_already_in_order_line = True
                     break
-            if isAlreadyInOrderLine:
+            if is_already_in_order_line is True:
                 continue
 
             product = self.env['product.product'].browse([product_tmpl['product_variant_id']]).id
@@ -38,5 +39,5 @@ class PurchaseOrder(models.Model):
                         'product_qty': max_qty-on_hand,
                         'price_unit': product_tmpl['price'],
                     })
-            except:
-                print("no reordering data")
+            except Exception as e:
+                _logger.exception(e)
