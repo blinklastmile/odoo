@@ -20,11 +20,12 @@ Preferences
 * Incoterms: International Commercial terms
 
 """,
-    'depends': ['stock_account','sale','sale_stock'],
+    'depends': ['stock_account','sale','sale_stock', 'purchase'],
     'data': [
         'views/sale.xml',
         'views/picking.xml',
-        'views/location.xml'
+        'views/location.xml',
+        'views/purchase.xml'
     ],
     'demo': [],
     'installable': True,
