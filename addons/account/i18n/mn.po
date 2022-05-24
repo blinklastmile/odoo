@@ -17,7 +17,7 @@
 # Martin Trigaux, 2021
 # Otgonbayar.A <gobi.mn@gmail.com>, 2021
 # Насан-Очир <nasaaskii@gmail.com>, 2021
-# Khishigbat Ganbold <khishigbat@asterisk-tech.mn>, 2021
+# hish, 2021
 # Tsog Tsog <ts.tsogoo@gmail.com>, 2021
 # tserendavaa tsogtoo <tseegii011929@gmail.com>, 2021
 # Батболд <batbold.ts@gmail.com>, 2021
@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-16 13:18+0000\n"
+"POT-Creation-Date: 2022-02-18 09:52+0000\n"
 "PO-Revision-Date: 2021-09-14 12:18+0000\n"
 "Last-Translator: Baskhuu Lodoikhuu <baskhuujacara@gmail.com>, 2021\n"
 "Language-Team: Mongolian (https://www.transifex.com/odoo/teams/41243/mn/)\n"
@@ -66,6 +66,12 @@ msgstr ""
 "        ж.ш 180 / (1 - 10%) = 200 (үнийн дүнд шингээгүй)\n"
 "        ж.ш 200 * (1 - 10%) = 180 (үнийн дүнд шингэсэн)\n"
 "        "
+
+#. module: account
+#: code:addons/account/models/account_move.py:0
+#, python-format
+msgid " The %(lock_type)s lock date is set on %(lock_date)s."
+msgstr ""
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_payment__reconciled_bills_count
@@ -171,6 +177,16 @@ msgstr "%s нь хадгалдаг талбар биш"
 #: model:ir.actions.report,print_report_name:account.account_invoices_without_payment
 msgid "(object._get_report_base_filename())"
 msgstr "(object._get_report_base_filename())"
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_journal
+msgid "- Posted Entries Only"
+msgstr ""
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_journal
+msgid "- Posted and Draft Entries"
+msgstr ""
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_move_line_form
@@ -542,6 +558,11 @@ msgstr ""
 "<span class=\"o_form_label mx-3 oe_edit_only\" attrs=\"{'invisible': ['|', "
 "('state', '!=', 'draft'), ('invoice_payment_term_id', '!=', False)]}\"> "
 "эсвэл </span>"
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.view_account_reconcile_model_form
+msgid "<span class=\"o_form_label o_td_label\">Match Invoice/bill with</span>"
+msgstr ""
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_account_reconcile_model_line_form
@@ -2672,6 +2693,12 @@ msgid "Available Journal"
 msgstr ""
 
 #. module: account
+#: model:ir.model.fields,field_description:account.field_account_payment__available_partner_bank_ids
+#: model:ir.model.fields,field_description:account.field_account_payment_register__available_partner_bank_ids
+msgid "Available Partner Bank"
+msgstr ""
+
+#. module: account
 #: model:ir.model.fields,field_description:account.field_account_journal__available_payment_method_ids
 #: model:ir.model.fields,field_description:account.field_account_payment_method_line__available_payment_method_ids
 msgid "Available Payment Method"
@@ -3814,6 +3841,11 @@ msgstr "Харилцагч бүхий компаниуд"
 #: model_terms:ir.ui.view,arch_db:account.view_account_tax_search
 msgid "Company"
 msgstr "Компани"
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.view_account_payment_form
+msgid "Company Bank Account"
+msgstr ""
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_fiscal_position__company_country_id
@@ -6110,6 +6142,11 @@ msgid "From"
 msgstr "Хаанаас"
 
 #. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_journal
+msgid "From :"
+msgstr ""
+
+#. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_account_move_line_filter
 msgid "From Payable accounts"
 msgstr "Өглөгийн данснаас"
@@ -7171,6 +7208,14 @@ msgstr ""
 #: code:addons/account/models/account_tax.py:0
 #, python-format
 msgid ""
+"Invoice and credit note repartition should have at least one tax repartition"
+" line."
+msgstr ""
+
+#. module: account
+#: code:addons/account/models/account_tax.py:0
+#, python-format
+msgid ""
 "Invoice and credit note distribution should have the same number of lines."
 msgstr ""
 
@@ -7554,6 +7599,13 @@ msgid "Journal Entry Date"
 msgstr "Ажил гүйлгээний огноо"
 
 #. module: account
+#. openerp-web
+#: code:addons/account/static/src/xml/account_payment.xml:0
+#, python-format
+msgid "Journal Entry Info"
+msgstr ""
+
+#. module: account
 #: model:ir.model.fields.selection,name:account.selection__account_print_journal__sort_selection__move_name
 #: model_terms:ir.ui.view,arch_db:account.report_journal
 msgid "Journal Entry Number"
@@ -7670,6 +7722,13 @@ msgstr "Компанийн санхүүгийн нээлтийн ажил гүй
 #. module: account
 #: model:ir.model.fields,help:account.field_account_automatic_entry_wizard__journal_id
 msgid "Journal where to create the entry."
+msgstr ""
+
+#. module: account
+#. openerp-web
+#: code:addons/account/static/src/xml/account_payment.xml:0
+#, python-format
+msgid "Journal:"
 msgstr ""
 
 #. module: account
@@ -8322,11 +8381,6 @@ msgstr "Илгээгдсэнээр тэмдэглэх"
 #: model:ir.model.fields.selection,name:account.selection__account_payment_register__payment_difference_handling__reconcile
 msgid "Mark as fully paid"
 msgstr "Бүрэн төлөгдсөнөөр тэмдэглэх"
-
-#. module: account
-#: model_terms:ir.ui.view,arch_db:account.view_account_reconcile_model_form
-msgid "Match Invoice/bill with"
-msgstr ""
 
 #. module: account
 #: model:ir.model.fields.selection,name:account.selection__account_reconcile_model__match_label__match_regex
@@ -10061,6 +10115,12 @@ msgid ""
 msgstr ""
 
 #. module: account
+#: code:addons/account/models/ir_module_module.py:0
+#, python-format
+msgid "Please update the Invoicing module before continuing."
+msgstr ""
+
+#. module: account
 #: model_terms:ir.ui.view,arch_db:account.bill_preview
 #: model_terms:ir.ui.view,arch_db:account.report_invoice_document
 msgid "Please use the following communication for your payment :"
@@ -10139,6 +10199,11 @@ msgid "Posted Before"
 msgstr ""
 
 #. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_journal
+msgid "Posted Entries only"
+msgstr ""
+
+#. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_account_move_filter
 msgid "Posted Journal Entries"
 msgstr "Батлагдсан ажил гүйлгээ"
@@ -10147,6 +10212,11 @@ msgstr "Батлагдсан ажил гүйлгээ"
 #: model_terms:ir.ui.view,arch_db:account.view_account_move_line_filter
 msgid "Posted Journal Items"
 msgstr "Батлагдсан журналын бичилт"
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_journal
+msgid "Posted and Draft Entries"
+msgstr ""
 
 #. module: account
 #: code:addons/account/models/account_move.py:0
@@ -12567,6 +12637,7 @@ msgid "Taxes"
 msgstr "Татвар"
 
 #. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_journal
 #: model_terms:ir.ui.view,arch_db:account.view_move_form
 msgid "Taxes Applied"
 msgstr "Татвар хэрэгжсэн"
@@ -13092,6 +13163,14 @@ msgstr ""
 #: code:addons/account/models/account_move.py:0
 #, python-format
 msgid ""
+"The accounting date being set prior to the %(lock_type)s lock date "
+"%(lock_date)s, it will be changed to %(accounting_date)s upon posting."
+msgstr ""
+
+#. module: account
+#: code:addons/account/models/account_move.py:0
+#, python-format
+msgid ""
 "The accounting date is set prior to the tax lock date which is set on %s. "
 "Hence, the accounting date will be changed to %s."
 msgstr ""
@@ -13301,6 +13380,18 @@ msgstr ""
 "засах боломжгүй, харин тэдгээрийг холбогдох төлбөр, нэхэмжлэлүүдтэй тулгах "
 "үйлдлийг хийх. - Батлагдсан: Бүх гүйлгээнүүд тулгагдсан байх ба хийх зүйл "
 "үлдээгүй."
+
+#. module: account
+#: code:addons/account/wizard/account_automatic_entry_wizard.py:0
+#, python-format
+msgid "The date of some related entries is protected by a lock date"
+msgstr ""
+
+#. module: account
+#: code:addons/account/wizard/account_automatic_entry_wizard.py:0
+#, python-format
+msgid "The date selected is protected by a lock date"
+msgstr ""
 
 #. module: account
 #: code:addons/account/models/account_payment_term.py:0
@@ -14307,6 +14398,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:account.field_account_automatic_entry_wizard__destination_account_id
 msgid "To"
 msgstr "Дуусах"
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_journal
+msgid "To :"
+msgstr ""
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_bank_statement_line__to_check
@@ -15959,6 +16055,12 @@ msgstr ""
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_move_form
+msgid ""
+"for this customer. You can allocate them to mark this credit note as paid."
+msgstr ""
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.view_move_form
 msgid "for this customer. You can allocate them to mark this invoice as paid."
 msgstr ""
 "Та уг нэхэмжлэлийг төлбөрийн бүртгэлтэй холбож төлөгдсөн болгох боломжтой."
@@ -15966,6 +16068,12 @@ msgstr ""
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_move_form
 msgid "for this vendor. You can allocate them to mark this bill as paid."
+msgstr ""
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.view_move_form
+msgid ""
+"for this vendor. You can allocate them to mark this credit note as paid."
 msgstr ""
 
 #. module: account
@@ -16043,13 +16151,13 @@ msgstr "дээр"
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_move_form
-msgid "outstanding debits"
-msgstr "биелээгүй дебетүүд"
+msgid "outstanding credits"
+msgstr ""
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_move_form
-msgid "outstanding payments"
-msgstr "биелээгүй төлбөрүүд"
+msgid "outstanding debits"
+msgstr "биелээгүй дебетүүд"
 
 #. module: account
 #: model:ir.model.fields.selection,name:account.selection__account_invoice_report__payment_state__paid
@@ -16068,6 +16176,12 @@ msgstr ""
 msgid ""
 "reserves the right to request a fixed interest payment amounting to 10% of "
 "the sum remaining due."
+msgstr ""
+
+#. module: account
+#: code:addons/account/models/account_move.py:0
+#, python-format
+msgid "tax"
 msgstr ""
 
 #. module: account
@@ -16112,6 +16226,12 @@ msgid ""
 "undertakes to do its best to supply performant services in due time in "
 "accordance with the agreed timeframes. However, none of its obligations can "
 "be considered as being an obligation to achieve results."
+msgstr ""
+
+#. module: account
+#: code:addons/account/models/account_move.py:0
+#, python-format
+msgid "user"
 msgstr ""
 
 #. module: account

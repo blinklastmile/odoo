@@ -23,7 +23,7 @@ msgstr ""
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_website_sale_payment_acquirer_onboarding_wizard___data_fetched
 msgid " Data Fetched"
-msgstr ""
+msgstr "البيانات المحضرة "
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.products
@@ -902,7 +902,7 @@ msgstr ""
 #: code:addons/website_sale/models/product_template.py:0
 #, python-format
 msgid "Category:"
-msgstr ""
+msgstr "الفئة: "
 
 #. module: website_sale
 #: code:addons/website_sale/models/website_snippet_filter.py:0
@@ -1464,7 +1464,7 @@ msgstr "إنشاء الفاتورة تلقائيًا عند تأكيد الدف�
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_res_config_settings__module_website_sale_gift_card
 msgid "Gift Card"
-msgstr ""
+msgstr "بطاقة الهدايا "
 
 #. module: website_sale
 #: model:ir.model.fields,help:website_sale.field_product_public_category__sequence
@@ -1540,25 +1540,25 @@ msgstr "صورة"
 #: model:ir.model.fields,field_description:website_sale.field_product_image__image_1024
 #: model:ir.model.fields,field_description:website_sale.field_product_public_category__image_1024
 msgid "Image 1024"
-msgstr ""
+msgstr "صورة 1024"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_image__image_128
 #: model:ir.model.fields,field_description:website_sale.field_product_public_category__image_128
 msgid "Image 128"
-msgstr ""
+msgstr "صورة 128"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_image__image_256
 #: model:ir.model.fields,field_description:website_sale.field_product_public_category__image_256
 msgid "Image 256"
-msgstr ""
+msgstr "صورة 256"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_image__image_512
 #: model:ir.model.fields,field_description:website_sale.field_product_public_category__image_512
 msgid "Image 512"
-msgstr ""
+msgstr "صورة 512"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.view_product_image_form
@@ -1752,7 +1752,7 @@ msgstr "وسط"
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_website_sale_payment_acquirer_onboarding_wizard__paypal_seller_account
 msgid "Merchant Account ID"
-msgstr ""
+msgstr "معرف حساب التاجر "
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_website_sale_payment_acquirer_onboarding_wizard__manual_name
@@ -1778,6 +1778,8 @@ msgstr "عربة تسوقي"
 #: model:ir.model.fields,field_description:website_sale.field_website_base_unit__name
 #: model_terms:ir.ui.view,arch_db:website_sale.address
 #: model_terms:ir.ui.view,arch_db:website_sale.sort
+#: model_terms:ir.ui.view,arch_db:website_sale.product_ribbon_view_tree
+#, python-format
 msgid "Name"
 msgstr "الاسم"
 
@@ -1884,7 +1886,7 @@ msgstr "عدد عربات التسوق المتروكة"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
 msgid "Number of Columns"
-msgstr ""
+msgstr "عدد الأعمدة "
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_website__shop_ppr
@@ -2057,7 +2059,7 @@ msgstr ""
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_website_sale_payment_acquirer_onboarding_wizard__paypal_pdt_token
 msgid "PDT Identity Token"
-msgstr ""
+msgstr "رمز هوية PDT "
 
 #. module: website_sale
 #: model:ir.model,name:website_sale.model_website_page
@@ -2134,7 +2136,7 @@ msgstr "المدفوعات المراد استلامها"
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_website_sale_payment_acquirer_onboarding_wizard__paypal_user_type
 msgid "Paypal User Type"
-msgstr ""
+msgstr "نوع مستخدم Paypal "
 
 #. module: website_sale
 #: code:addons/website_sale/models/website_snippet_filter.py:0

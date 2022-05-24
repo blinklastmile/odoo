@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-24 08:19+0000\n"
-"PO-Revision-Date: 2022-01-24 08:19+0000\n"
+"POT-Creation-Date: 2022-02-18 09:52+0000\n"
+"PO-Revision-Date: 2022-02-18 09:52+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -28,6 +28,12 @@ msgid ""
 "        e.g 180 / (1 - 10%) = 200 (not price included)\n"
 "        e.g 200 * (1 - 10%) = 180 (price included)\n"
 "        "
+msgstr ""
+
+#. module: account
+#: code:addons/account/models/account_move.py:0
+#, python-format
+msgid " The %(lock_type)s lock date is set on %(lock_date)s."
 msgstr ""
 
 #. module: account
@@ -133,6 +139,16 @@ msgstr ""
 #: model:ir.actions.report,print_report_name:account.account_invoices
 #: model:ir.actions.report,print_report_name:account.account_invoices_without_payment
 msgid "(object._get_report_base_filename())"
+msgstr ""
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_journal
+msgid "- Posted Entries Only"
+msgstr ""
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_journal
+msgid "- Posted and Draft Entries"
 msgstr ""
 
 #. module: account
@@ -5886,6 +5902,11 @@ msgid "From"
 msgstr ""
 
 #. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_journal
+msgid "From :"
+msgstr ""
+
+#. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_account_move_line_filter
 msgid "From Payable accounts"
 msgstr ""
@@ -6915,6 +6936,14 @@ msgstr ""
 #: code:addons/account/models/account_tax.py:0
 #, python-format
 msgid ""
+"Invoice and credit note repartition should have at least one tax repartition"
+" line."
+msgstr ""
+
+#. module: account
+#: code:addons/account/models/account_tax.py:0
+#, python-format
+msgid ""
 "Invoice and credit note distribution should have the same number of lines."
 msgstr ""
 
@@ -7298,6 +7327,13 @@ msgid "Journal Entry Date"
 msgstr ""
 
 #. module: account
+#. openerp-web
+#: code:addons/account/static/src/xml/account_payment.xml:0
+#, python-format
+msgid "Journal Entry Info"
+msgstr ""
+
+#. module: account
 #: model:ir.model.fields.selection,name:account.selection__account_print_journal__sort_selection__move_name
 #: model_terms:ir.ui.view,arch_db:account.report_journal
 msgid "Journal Entry Number"
@@ -7414,6 +7450,13 @@ msgstr ""
 #. module: account
 #: model:ir.model.fields,help:account.field_account_automatic_entry_wizard__journal_id
 msgid "Journal where to create the entry."
+msgstr ""
+
+#. module: account
+#. openerp-web
+#: code:addons/account/static/src/xml/account_payment.xml:0
+#, python-format
+msgid "Journal:"
 msgstr ""
 
 #. module: account
@@ -9764,6 +9807,12 @@ msgid ""
 msgstr ""
 
 #. module: account
+#: code:addons/account/models/ir_module_module.py:0
+#, python-format
+msgid "Please update the Invoicing module before continuing."
+msgstr ""
+
+#. module: account
 #: model_terms:ir.ui.view,arch_db:account.bill_preview
 #: model_terms:ir.ui.view,arch_db:account.report_invoice_document
 msgid "Please use the following communication for your payment :"
@@ -9842,6 +9891,11 @@ msgid "Posted Before"
 msgstr ""
 
 #. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_journal
+msgid "Posted Entries only"
+msgstr ""
+
+#. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_account_move_filter
 msgid "Posted Journal Entries"
 msgstr ""
@@ -9849,6 +9903,11 @@ msgstr ""
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_account_move_line_filter
 msgid "Posted Journal Items"
+msgstr ""
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_journal
+msgid "Posted and Draft Entries"
 msgstr ""
 
 #. module: account
@@ -12215,6 +12274,7 @@ msgid "Taxes"
 msgstr ""
 
 #. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_journal
 #: model_terms:ir.ui.view,arch_db:account.view_move_form
 msgid "Taxes Applied"
 msgstr ""
@@ -12718,6 +12778,14 @@ msgstr ""
 #: code:addons/account/models/account_move.py:0
 #, python-format
 msgid ""
+"The accounting date being set prior to the %(lock_type)s lock date "
+"%(lock_date)s, it will be changed to %(accounting_date)s upon posting."
+msgstr ""
+
+#. module: account
+#: code:addons/account/models/account_move.py:0
+#, python-format
+msgid ""
 "The accounting date is set prior to the tax lock date which is set on %s. "
 "Hence, the accounting date will be changed to %s."
 msgstr ""
@@ -12917,6 +12985,18 @@ msgid ""
 "Journal Entries.- Processing: No longer editable with posted Journal "
 "entries, ready for the reconciliation.- Validated: All lines are reconciled."
 " There is nothing left to process."
+msgstr ""
+
+#. module: account
+#: code:addons/account/wizard/account_automatic_entry_wizard.py:0
+#, python-format
+msgid "The date of some related entries is protected by a lock date"
+msgstr ""
+
+#. module: account
+#: code:addons/account/wizard/account_automatic_entry_wizard.py:0
+#, python-format
+msgid "The date selected is protected by a lock date"
 msgstr ""
 
 #. module: account
@@ -13842,6 +13922,11 @@ msgstr ""
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_automatic_entry_wizard__destination_account_id
 msgid "To"
+msgstr ""
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_journal
+msgid "To :"
 msgstr ""
 
 #. module: account
@@ -15435,12 +15520,24 @@ msgstr ""
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_move_form
+msgid ""
+"for this customer. You can allocate them to mark this credit note as paid."
+msgstr ""
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.view_move_form
 msgid "for this customer. You can allocate them to mark this invoice as paid."
 msgstr ""
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_move_form
 msgid "for this vendor. You can allocate them to mark this bill as paid."
+msgstr ""
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.view_move_form
+msgid ""
+"for this vendor. You can allocate them to mark this credit note as paid."
 msgstr ""
 
 #. module: account
@@ -15518,12 +15615,12 @@ msgstr ""
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_move_form
-msgid "outstanding debits"
+msgid "outstanding credits"
 msgstr ""
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_move_form
-msgid "outstanding payments"
+msgid "outstanding debits"
 msgstr ""
 
 #. module: account
@@ -15543,6 +15640,12 @@ msgstr ""
 msgid ""
 "reserves the right to request a fixed interest payment amounting to 10% of "
 "the sum remaining due."
+msgstr ""
+
+#. module: account
+#: code:addons/account/models/account_move.py:0
+#, python-format
+msgid "tax"
 msgstr ""
 
 #. module: account
@@ -15587,6 +15690,12 @@ msgid ""
 "undertakes to do its best to supply performant services in due time in "
 "accordance with the agreed timeframes. However, none of its obligations can "
 "be considered as being an obligation to achieve results."
+msgstr ""
+
+#. module: account
+#: code:addons/account/models/account_move.py:0
+#, python-format
+msgid "user"
 msgstr ""
 
 #. module: account

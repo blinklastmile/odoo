@@ -483,8 +483,8 @@ class ResPartner(models.Model):
     invoice_warn_msg = fields.Text('Message for Invoice')
     # Computed fields to order the partners as suppliers/customers according to the
     # amount of their generated incoming/outgoing account moves
-    supplier_rank = fields.Integer(default=0)
-    customer_rank = fields.Integer(default=0)
+    supplier_rank = fields.Integer(default=0, copy=False)
+    customer_rank = fields.Integer(default=0, copy=False)
 
     def _get_name_search_order_by_fields(self):
         res = super()._get_name_search_order_by_fields()
@@ -523,7 +523,7 @@ class ResPartner(models.Model):
             ('move_type', 'in', ('out_invoice', 'out_refund')),
             ('partner_id', 'child_of', self.id),
         ]
-        action['context'] = {'default_move_type':'out_invoice', 'move_type':'out_invoice', 'journal_type': 'sale', 'search_default_open': 1}
+        action['context'] = {'default_move_type':'out_invoice', 'move_type':'out_invoice', 'journal_type': 'sale', 'search_default_open': 1, 'active_test': False}
         return action
 
     def can_edit_vat(self):
