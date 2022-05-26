@@ -27,16 +27,16 @@ class PurchaseOrder(models.Model):
                 continue
 
             product = self.env['product.product'].browse([product_tmpl['product_variant_id']]).id
-
             try:
                 min_qty = product[0]['reordering_min_qty']
                 max_qty = product[0]['reordering_max_qty']
-                on_hand = product_tmpl['qty_available']
-                if on_hand > min_qty and on_hand < max_qty:
+                # on_hand = product_tmpl['qty_available']
+                forecasted = product_tmpl['virtual_available']
+                if min_qty <= forecasted < max_qty:
                     purchase_order.order_line.create({
-                        'order_id': seller.id,
+                        'order_id': self.ids[0],
                         'product_id': product_tmpl['product_variant_id'].id,  # some product.product ID,
-                        'product_qty': max_qty-on_hand,
+                        'product_qty': max_qty-forecasted,
                         'price_unit': product_tmpl['price'],
                     })
             except Exception as e:

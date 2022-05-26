@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<!--    <data>-->
-        <record id="view_purchase_form_inherit" model="ir.ui.view">
-            <field name="name">purchase.order.form</field>
-            <field name="model">purchase.order</field>
-            <field name="inherit_id" ref="purchase.purchase_order_form"/>
-            <field name="context">{"purchase_order_id" : purchase.order.id}</field>
-            <field name="arch" type="xml">
-<!--                <xpath expr="//tree" position="inside">-->
-                    <button name="button_cancel" position="after">
-                        <button name="button_restock" string="Re-stock fill" type="object"/>
-                    </button>
-<!--                </xpath>-->
-            </field>
-        </record>
-<!--    </data>-->
-
-
+    <record id="view_purchase_form_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+                <button name="button_cancel" position="after">
+                    <button name="button_restock" string="Re-stock fill" type="object"/>
+                </button>
+        </field>
+    </record>
 </odoo>
