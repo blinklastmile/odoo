@@ -515,8 +515,8 @@ class IrHttp(models.AbstractModel):
         result = super(IrHttp, cls)._dispatch()
 
         cook_lang = request.httprequest.cookies.get('frontend_lang')
-        if request.is_frontend and cook_lang != request.lang.code and hasattr(result, 'set_cookie'):
-            result.set_cookie('frontend_lang', request.lang.code)
+        if request.is_frontend and cook_lang != request.lang._get_cached('code') and hasattr(result, 'set_cookie'):
+            result.set_cookie('frontend_lang', request.lang._get_cached('code'))
 
         return result
 
@@ -537,8 +537,13 @@ class IrHttp(models.AbstractModel):
             raise Exception("Rerouting limit exceeded")
         request.httprequest.environ['PATH_INFO'] = path
         # void werkzeug cached_property. TODO: find a proper way to do this
-        for key in ('path', 'full_path', 'url', 'base_url'):
+        for key in ('full_path', 'url', 'base_url'):
             request.httprequest.__dict__.pop(key, None)
+        # since werkzeug 2.0 `path`` became an attribute and is not a cached property anymore
+        if hasattr(type(request.httprequest), 'path'): # cached property
+            request.httprequest.__dict__.pop('path', None)
+        else: # direct attribute
+            request.httprequest.path = '/' + path.lstrip('/')
 
         return cls._dispatch()
 
