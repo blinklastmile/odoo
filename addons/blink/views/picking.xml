@@ -6,6 +6,9 @@
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
+                <button name="action_put_in_pack" position="after" >
+                    <button name="action_sync_packages" string="Sync packages" type="object" />
+                 </button>
                 <field name="date_done" position="after">
                 		<field name="deliv_label" widget="url"/>
                 		<field name="first_order"/>
