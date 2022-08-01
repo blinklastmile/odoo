@@ -73,9 +73,9 @@ class StockPicking(models.Model):
             print('response 401')
             update_response = self.update_access_token()
             if not update_response == 200:
-                response = self.set_access_token()
+                self.set_access_token()
             response = self.request_sync_packages(request_body)
-            if not response.status_code == 200:
+            if not response.status_code == 201:
                 _logger.debug("Error occurred when sending request.\n{}".format(response.text))
                 raise UserError("Error occurred when sending request.\n{}".format(response.text))
 
