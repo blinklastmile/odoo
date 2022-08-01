@@ -11,6 +11,7 @@
                  </button>
                 <field name="date_done" position="after">
                 		<field name="deliv_label" widget="url"/>
+                        <field name="delivery_url" widget="url"/>
                 		<field name="first_order"/>
             	</field>
             </field>
