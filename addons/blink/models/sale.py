@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Blinklastmile. See LICENSE file for full copyright and licensing details.
-
-
+from odoo.addons.blink.config._env import BLINK_ADMIN_BASE_URL
 from odoo import api, fields, models
 
 
@@ -18,4 +17,6 @@ class SaleOrder(models.Model):
     def get_delivery_url(self):
         for rec in self:
             if rec.external_delivery_id:
-                rec.delivery_url = "http://localhost:8000/admin/database/delivery/{}".format(rec.external_delivery_id)
+                rec.delivery_url = "{}admin/database/delivery/{}".format(BLINK_ADMIN_BASE_URL, rec.external_delivery_id)
+            else:
+                rec.delivery_url = None

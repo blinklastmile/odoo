@@ -22,7 +22,7 @@ class StockPicking(models.Model):
     def get_delivery_url(self):
         for rec in self:
             if rec.external_delivery_id:
-                rec.delivery_url = "http://localhost:8000/admin/database/delivery/{}".format(rec.external_delivery_id)
+                rec.delivery_url = "{}admin/database/delivery/{}".format(BLINK_ADMIN_BASE_URL, rec.external_delivery_id)
             else:
                 rec.delivery_url = None
 
@@ -70,7 +70,6 @@ class StockPicking(models.Model):
                 if 'uuid' in new_package:
                     package.external_id = new_package['uuid']
         elif response.status_code == 401:
-            print('response 401')
             update_response = self.update_access_token()
             if not update_response == 200:
                 self.set_access_token()
@@ -100,7 +99,6 @@ class StockPicking(models.Model):
             self.env.user.access_token = response['access_token']
             self.env.user.refresh_token = response['refresh_token']
         _logger.debug("Request body: {}".format(request_body))
-        _logger.debug("Requesting access token: {}".format(response.text))
 
     def update_access_token(self):
         request_body = {
@@ -116,4 +114,3 @@ class StockPicking(models.Model):
             self.env.user.refresh_token = response['refresh_token']
             return 200
         _logger.debug("Request body: {}".format(request_body))
-        _logger.debug("Refreshing access token: {}".format(response.text))
