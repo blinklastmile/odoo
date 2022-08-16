@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Blinklastmile. See LICENSE file for full copyright and licensing details.
 from odoo.addons.blink.config._env import BLINK_ADMIN_BASE_URL
-from odoo.addons.blink.models.utils import get_delivery_url
+from odoo.addons.blink.utils import get_delivery_url
 from odoo import api, fields, models
 
 
