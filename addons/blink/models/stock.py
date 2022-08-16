@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Blinklastmile. See LICENSE file for full copyright and licensing details.
+from odoo.addons.blink.utils import get_delivery_url
 from odoo import api, fields, models, _
 import logging
 from odoo.addons.blink.config._env import *
@@ -16,15 +17,12 @@ class StockPicking(models.Model):
     deliv_label = fields.Char(related="sale_id.deliv_label", string="Label")
     first_order = fields.Boolean(related="sale_id.first_order", string='First Order')
     external_delivery_id = fields.Char(related="sale_id.external_delivery_id", string="External id")
-    delivery_url = fields.Char(string="Delivery label", compute="get_delivery_url")
+    delivery_url = fields.Char(string="Delivery label", compute="set_delivery_url")
 
     @api.depends('external_delivery_id')
-    def get_delivery_url(self):
+    def set_delivery_url(self):
         for rec in self:
-            if rec.external_delivery_id:
-                rec.delivery_url = "{}admin/database/delivery/{}".format(BLINK_ADMIN_BASE_URL, rec.external_delivery_id)
-            else:
-                rec.delivery_url = None
+            rec.delivery_url = get_delivery_url(rec.external_delivery_id)
 
     def action_sync_packages(self):
         stock_picking = super(StockPicking, self)
