@@ -22,7 +22,7 @@ class StockPicking(models.Model):
     def get_delivery_url(self):
         for rec in self:
             if rec.external_delivery_id:
-                rec.delivery_url = "{}admin/database/delivery/{}".format(BLINK_ADMIN_BASE_URL, rec.external_delivery_id)
+                rec.delivery_url = "{}admin/database/delivery/?q={}".format(BLINK_ADMIN_BASE_URL, rec.external_delivery_id)
             else:
                 rec.delivery_url = None
 
