@@ -25,7 +25,8 @@ Preferences
         'views/sale.xml',
         'views/picking.xml',
         'views/location.xml',
-        'views/purchase.xml'
+        'views/purchase.xml',
+        'views/user.xml'
     ],
     'demo': [],
     'installable': True,
