@@ -43,11 +43,14 @@ import {
     isEmptyBlock,
     getUrlsInfosInString,
     URL_REGEX,
+    URL_REGEX_WITH_INFOS,
     isSelectionFormat,
     YOUTUBE_URL_GET_VIDEO_ID,
     unwrapContents,
     peek,
     rightPos,
+    rightLeafOnlyNotBlockPath,
+    isBlock
 } from './utils/utils.js';
 import { editorCommands } from './commands/commands.js';
 import { Powerbox } from './powerbox/Powerbox.js';
@@ -210,6 +213,7 @@ export class OdooEditor extends EventTarget {
                 onChange: () => {},
                 isHintBlacklisted: () => false,
                 filterMutationRecords: (records) => records,
+                onPostSanitize: () => {},
                 direction: 'ltr',
                 _t: string => string,
                 allowCommandVideo: true,
@@ -272,7 +276,11 @@ export class OdooEditor extends EventTarget {
         // Convention: root node is ID root.
         editable.oid = 'root';
         this._idToNodeMap.set(1, editable);
-        this.editable = this.options.toSanitize ? sanitize(editable) : editable;
+        if (this.options.toSanitize) {
+            sanitize(editable);
+            this.options.onPostSanitize(editable);
+        }
+        this.editable = editable;
         this.editable.classList.add("odoo-editor-editable");
         this.editable.setAttribute('dir', this.options.direction);
 
@@ -414,6 +422,7 @@ export class OdooEditor extends EventTarget {
         // sanitize and mark current position as sanitized
         sanitize(commonAncestor);
         this._pluginCall('sanitizeElement', [commonAncestor]);
+        this.options.onPostSanitize(commonAncestor);
     }
 
     addDomListener(element, eventName, callback) {
@@ -483,7 +492,7 @@ export class OdooEditor extends EventTarget {
         }
     }
     observerFlush() {
-        this.observerApply(this.observer.takeRecords());
+        this.observerApply(this.filterMutationRecords(this.observer.takeRecords()));
     }
     observerActive(label) {
         this._observerUnactiveLabels.delete(label);
@@ -502,6 +511,7 @@ export class OdooEditor extends EventTarget {
                 this.observerApply(records);
             });
         }
+        this.dispatchEvent(new Event('preObserverActive'));
         this.observer.observe(this.editable, {
             childList: true,
             subtree: true,
@@ -696,7 +706,7 @@ export class OdooEditor extends EventTarget {
         if (!this._historyStepsActive) {
             return;
         }
-        this.observerFlush();
+        this.sanitize();
         // check that not two unBreakables modified
         if (this._toRollback) {
             if (!skipRollback) this.historyRollback();
@@ -981,6 +991,26 @@ export class OdooEditor extends EventTarget {
     }
     historyUnpauseSteps() {
         this._historyStepsActive = true;
+    }
+    /**
+     * Stash the mutations of the current step to re-apply them later.
+     */
+    historyStash() {
+        if (!this._historyStashedMutations) {
+            this._historyStashedMutations = [];
+        }
+        this._historyStashedMutations.push(...this._currentStep.mutations);
+        this._currentStep.mutations = [];
+    }
+    /**
+     * Unstash the previously stashed mutations into the current step.
+     */
+    historyUnstash() {
+        if (!this._currentStep.mutations) {
+            this._currentStep.mutations = [];
+        }
+        this._currentStep.mutations.unshift(...this._historyStashedMutations);
+        this._historyStashedMutations = [];
     }
     _historyClean() {
         this._historySteps = [];
@@ -1285,12 +1315,12 @@ export class OdooEditor extends EventTarget {
 
     /**
      * Find all descendants of `element` with a `data-call` attribute and bind
-     * them on mousedown to the execution of the command matching that
+     * them on click to the execution of the command matching that
      * attribute.
      */
     bindExecCommand(element) {
         for (const buttonEl of element.querySelectorAll('[data-call]')) {
-            buttonEl.addEventListener('mousedown', ev => {
+            buttonEl.addEventListener('click', ev => {
                 const sel = this.document.getSelection();
                 if (sel.anchorNode && ancestors(sel.anchorNode).includes(this.editable)) {
                     this.execCommand(buttonEl.dataset.call, buttonEl.dataset.arg1);
@@ -1387,9 +1417,9 @@ export class OdooEditor extends EventTarget {
         fillEmpty(closestBlock(range.endContainer));
         // Ensure trailing space remains visible.
         const joinWith = range.endContainer;
-        const joinSibling = joinWith && joinWith.nextSibling;
         const oldText = joinWith.textContent;
-        const hasSpaceAfter = joinSibling && joinSibling.textContent.startsWith(' ');
+        const rightLeaf = rightLeafOnlyNotBlockPath(range.endContainer).next().value;
+        const hasSpaceAfter = !rightLeaf || rightLeaf.textContent.startsWith(' ');
         const shouldPreserveSpace = (doJoin || hasSpaceAfter) && joinWith && oldText.endsWith(' ');
         if (shouldPreserveSpace) {
             joinWith.textContent = oldText.replace(/ $/, '\u00A0');
@@ -1417,10 +1447,9 @@ export class OdooEditor extends EventTarget {
                 break;
             }
         }
-        next = joinWith && joinWith.nextSibling;
+        next = range.endContainer && rightLeafOnlyNotBlockPath(range.endContainer).next().value;
         if (
-            shouldPreserveSpace &&
-            !(next && next.nodeType === Node.TEXT_NODE && next.textContent.startsWith(' '))
+            shouldPreserveSpace && next && !(next && next.nodeType === Node.TEXT_NODE && next.textContent.startsWith(' '))
         ) {
             // Restore the text we modified in order to preserve trailing space.
             joinWith.textContent = oldText;
@@ -1575,7 +1604,6 @@ export class OdooEditor extends EventTarget {
     _applyCommand(...args) {
         this._recordHistorySelection(true);
         const result = this._protect(() => this._applyRawCommand(...args));
-        this.sanitize();
         this.historyStep();
         this._handleCommandHint();
         return result;
@@ -1767,7 +1795,7 @@ export class OdooEditor extends EventTarget {
 
         const mainCommands = [
             {
-                groupName: 'Basic blocks',
+                groupName: this.options._t('Basic blocks'),
                 title: this.options._t('Heading 1'),
                 description: this.options._t('Big section heading.'),
                 fontawesome: 'fa-header',
@@ -1776,7 +1804,7 @@ export class OdooEditor extends EventTarget {
                 },
             },
             {
-                groupName: 'Basic blocks',
+                groupName: this.options._t('Basic blocks'),
                 title: this.options._t('Heading 2'),
                 description: this.options._t('Medium section heading.'),
                 fontawesome: 'fa-header',
@@ -1785,7 +1813,7 @@ export class OdooEditor extends EventTarget {
                 },
             },
             {
-                groupName: 'Basic blocks',
+                groupName: this.options._t('Basic blocks'),
                 title: this.options._t('Heading 3'),
                 description: this.options._t('Small section heading.'),
                 fontawesome: 'fa-header',
@@ -1794,7 +1822,7 @@ export class OdooEditor extends EventTarget {
                 },
             },
             {
-                groupName: 'Basic blocks',
+                groupName: this.options._t('Basic blocks'),
                 title: this.options._t('Text'),
                 description: this.options._t('Paragraph block.'),
                 fontawesome: 'fa-paragraph',
@@ -1803,7 +1831,7 @@ export class OdooEditor extends EventTarget {
                 },
             },
             {
-                groupName: 'Basic blocks',
+                groupName: this.options._t('Basic blocks'),
                 title: this.options._t('Bulleted list'),
                 description: this.options._t('Create a simple bulleted list.'),
                 fontawesome: 'fa-list-ul',
@@ -1812,7 +1840,7 @@ export class OdooEditor extends EventTarget {
                 },
             },
             {
-                groupName: 'Basic blocks',
+                groupName: this.options._t('Basic blocks'),
                 title: this.options._t('Numbered list'),
                 description: this.options._t('Create a list with numbering.'),
                 fontawesome: 'fa-list-ol',
@@ -1821,7 +1849,7 @@ export class OdooEditor extends EventTarget {
                 },
             },
             {
-                groupName: 'Basic blocks',
+                groupName: this.options._t('Basic blocks'),
                 title: this.options._t('Checklist'),
                 description: this.options._t('Track tasks with a checklist.'),
                 fontawesome: 'fa-check-square-o',
@@ -1830,7 +1858,7 @@ export class OdooEditor extends EventTarget {
                 },
             },
             {
-                groupName: 'Basic blocks',
+                groupName: this.options._t('Basic blocks'),
                 title: this.options._t('Separator'),
                 description: this.options._t('Insert an horizontal rule separator.'),
                 fontawesome: 'fa-minus',
@@ -1839,7 +1867,7 @@ export class OdooEditor extends EventTarget {
                 },
             },
             {
-                groupName: 'Basic blocks',
+                groupName: this.options._t('Basic blocks'),
                 title: this.options._t('Table'),
                 description: this.options._t('Insert a table.'),
                 fontawesome: 'fa-table',
@@ -1848,7 +1876,7 @@ export class OdooEditor extends EventTarget {
                 },
             },
             {
-                groupName: 'Basic blocks',
+                groupName: this.options._t('Basic blocks'),
                 title: this.options._t('Switch direction'),
                 description: this.options._t('Switch the text\'s direction.'),
                 fontawesome: 'fa-exchange',
@@ -2137,7 +2165,31 @@ export class OdooEditor extends EventTarget {
         for (const child of [...container.childNodes]) {
             this._cleanForPaste(child);
         }
-        return container.innerHTML;
+        // Force inline nodes at the root of the container into separate P
+        // elements. This is a tradeoff to ensure some features that rely on
+        // nodes having a parent (e.g. convert to list, title, etc.) can work
+        // properly on such nodes without having to actually handle that
+        // particular case in all of those functions. In fact, this case cannot
+        // happen on a new document created using this editor, but will happen
+        // instantly when editing a document that was created from Etherpad.
+        const temporaryContainer = document.createElement('template');
+        let temporaryP = document.createElement('p');
+        for (const child of [...container.childNodes]) {
+            if (isBlock(child)) {
+                if (temporaryP.childNodes.length > 0) {
+                    temporaryContainer.content.appendChild(temporaryP);
+                    temporaryP = document.createElement('p');
+                }
+                temporaryContainer.content.appendChild(child);
+            } else {
+                temporaryP.appendChild(child);
+            }
+
+            if (temporaryP.childNodes.length > 0) {
+                temporaryContainer.content.appendChild(temporaryP);
+            }
+        }
+        return temporaryContainer.innerHTML;
     }
     /**
      * Clean a node for safely pasting. Cleaning an element involves unwrapping
@@ -2304,12 +2356,10 @@ export class OdooEditor extends EventTarget {
                         if (brs.includes(anchor.firstChild)) {
                             brs.forEach(br => anchor.before(br));
                             setSelection(...rightPos(brs[brs.length - 1]));
-                            this.sanitize();
                             this.historyStep();
                         } else if (brs.includes(anchor.lastChild)) {
                             brs.forEach(br => anchor.after(br));
                             setSelection(...rightPos(brs[0]));
-                            this.sanitize();
                             this.historyStep();
                         }
                     }
@@ -2345,15 +2395,33 @@ export class OdooEditor extends EventTarget {
                 // Check for url after user insert a space so we won't transform an incomplete url.
                 if (
                     ev.data &&
-                    ev.data.includes(' ') &&
+                    ev.data === ' ' &&
                     selection &&
-                    selection.anchorNode
-                    && (!this.commandBar._active ||
+                    selection.anchorNode &&
+                    !closestElement(selection.anchorNode).closest('a') &&
+                    selection.anchorNode.nodeType === Node.TEXT_NODE &&
+                    (!this.commandBar._active ||
                         this.commandBar._currentOpenOptions.closeOnSpace !== true)
                 ) {
-                    this._convertUrlInElement(closestElement(selection.anchorNode));
+                    const textSliced = selection.anchorNode.textContent.slice(0, selection.anchorOffset);
+                    const textNodeSplitted = textSliced.split(/\s/);
+
+                    // Remove added space
+                    textNodeSplitted.pop();
+                    const potentialUrl = textNodeSplitted.pop();
+                    const lastWordMatch = potentialUrl.match(URL_REGEX_WITH_INFOS);
+
+                    if (lastWordMatch) {
+                        const matches = getUrlsInfosInString(textSliced);
+                        const match = matches[matches.length - 1];
+                        this._createLinkWithUrlInTextNode(
+                            selection.anchorNode,
+                            match.url,
+                            match.index,
+                            match.length,
+                        );
+                    }
                 }
-                this.sanitize();
                 this.historyStep();
             } else if (ev.inputType === 'insertLineBreak') {
                 this._compositionStep();
@@ -2361,7 +2429,6 @@ export class OdooEditor extends EventTarget {
                 ev.preventDefault();
                 this._applyCommand('oShiftEnter');
             } else {
-                this.sanitize();
                 this.historyStep();
             }
         } else if (ev.inputType === 'insertCompositionText') {
@@ -2574,6 +2641,42 @@ export class OdooEditor extends EventTarget {
      *
      */
     initElementForEdition(element = this.editable) {
+        // Detect if the editable base element contain orphan inline nodes. If
+        // so we transform the base element HTML to put those orphans inside
+        // `<p>` containers.
+        const orphanInlineChildNodes = [...element.childNodes].find(
+            (n) => !isBlock(n) && (n.nodeType === Node.ELEMENT_NODE || n.textContent.trim() !== "")
+        );
+        if (orphanInlineChildNodes) {
+            const childNodes = [...element.childNodes];
+            const tempEl = document.createElement('temp-container');
+            let currentP = document.createElement('p');
+            currentP.style.marginBottom = '0';
+            do {
+                const node = childNodes.shift();
+                const nodeIsBlock = isBlock(node);
+                const nodeIsBR = node.nodeName === 'BR';
+                // Append to the P unless child is block or an unneeded BR.
+                if (!(nodeIsBlock || (nodeIsBR && currentP.childNodes.length))) {
+                    currentP.append(node);
+                }
+                // Break paragraphs on blocks and BR.
+                if (nodeIsBlock || nodeIsBR || childNodes.length === 0) {
+                    // Ensure we don't add an empty P or a P containing only
+                    // formating spaces that should not be visible.
+                    if (currentP.childNodes.length && currentP.innerHTML.trim() !== '') {
+                        tempEl.append(currentP);
+                    }
+                    currentP = currentP.cloneNode();
+                    // Append block children directly to the template.
+                    if (nodeIsBlock) {
+                        tempEl.append(node);
+                    }
+                }
+            } while (childNodes.length)
+            element.replaceChildren(...tempEl.childNodes);
+        }
+
         // Flag elements with forced contenteditable=false.
         // We need the flag to be able to leave the contentEditable
         // at the end of the edition (see cleanForSave())
@@ -2896,36 +2999,6 @@ export class OdooEditor extends EventTarget {
     }
 
     /**
-     * Convert valid url text into links inside the given element.
-     *
-     * @param {HTMLElement} el
-     */
-    _convertUrlInElement(el) {
-        // We will not replace url inside already existing Link element.
-        if (el.tagName === 'A') {
-            return;
-        }
-
-        for (let child of el.childNodes) {
-            if (child.nodeType === Node.TEXT_NODE && child.length > 3) {
-                const childStr = child.nodeValue;
-                const matches = getUrlsInfosInString(childStr);
-                if (matches.length) {
-                    // We only to take care of the first match.
-                    // The method `_createLinkWithUrlInTextNode` will split the text node,
-                    // the other url matches will then be matched again in the nexts loops of el.childnodes.
-                    this._createLinkWithUrlInTextNode(
-                        child,
-                        matches[0].url,
-                        matches[0].index,
-                        matches[0].length,
-                    );
-                }
-            }
-        }
-    }
-
-    /**
      * Create a Link in the node text based on the given data
      *
      * @param {Node} textNode
@@ -2954,6 +3027,7 @@ export class OdooEditor extends EventTarget {
     addImagesFiles(imageFiles) {
         for (const imageFile of imageFiles) {
             const imageNode = document.createElement('img');
+            imageNode.style.width = '100%';
             imageNode.dataset.fileName = imageFile.name;
             getImageUrl(imageFile).then((url)=> {
                 imageNode.src = url;
@@ -2969,10 +3043,10 @@ export class OdooEditor extends EventTarget {
         const sel = this.document.getSelection();
         const files = getImageFiles(ev.clipboardData);
         const clipboardHtml = ev.clipboardData.getData('text/html');
-        if (files.length) {
-            this.addImagesFiles(files);
-        } else if (clipboardHtml) {
+        if (clipboardHtml) {
             this.execCommand('insertHTML', this._prepareClipboardData(clipboardHtml));
+        } else if (files.length) {
+            this.addImagesFiles(files);
         } else {
             const text = ev.clipboardData.getData('text/plain');
             const splitAroundUrl = text.split(URL_REGEX);
@@ -2993,8 +3067,8 @@ export class OdooEditor extends EventTarget {
                     const baseEmbedCommand = [
                         {
                             groupName: 'paste',
-                            title: 'Paste as URL',
-                            description: 'Create an URL.',
+                            title: this.options._t('Paste as URL'),
+                            description: this.options._t('Create an URL.'),
                             fontawesome: 'fa-link',
                             callback: () => {
                                 this.historyUndo();
@@ -3016,8 +3090,8 @@ export class OdooEditor extends EventTarget {
                         },
                         {
                             groupName: 'paste',
-                            title: 'Paste as text',
-                            description: 'Simple text paste.',
+                            title: this.options._t('Paste as text'),
+                            description: this.options._t('Simple text paste.'),
                             fontawesome: 'fa-font',
                             callback: () => {},
                         },
@@ -3039,9 +3113,9 @@ export class OdooEditor extends EventTarget {
                         this.commandBar.open({
                             commands: [
                                 {
-                                    groupName: 'Embed',
-                                    title: 'Embed Image',
-                                    description: 'Embed the image in the document.',
+                                    groupName: this.options._t('Embed'),
+                                    title: this.options._t('Embed Image'),
+                                    description: this.options._t('Embed the image in the document.'),
                                     fontawesome: 'fa-image',
                                     shouldPreValidate: () => false,
                                     callback: () => {
@@ -3067,9 +3141,9 @@ export class OdooEditor extends EventTarget {
                         this.commandBar.open({
                             commands: [
                                 {
-                                    groupName: 'Embed',
-                                    title: 'Embed Youtube Video',
-                                    description: 'Embed the youtube video in the document.',
+                                    groupName: this.options._t('Embed'),
+                                    title: this.options._t('Embed Youtube Video'),
+                                    description: this.options._t('Embed the youtube video in the document.'),
                                     fontawesome: 'fa-youtube-play',
                                     shouldPreValidate: () => false,
                                     callback: () => {
@@ -3123,7 +3197,7 @@ export class OdooEditor extends EventTarget {
                         }
                     }
                 } else if (splitAroundUrl[i] !== '') {
-                    const textFragments = splitAroundUrl[i].split('\n');
+                    const textFragments = splitAroundUrl[i].split(/\r?\n/);
                     let textIndex = 1;
                     for (const textFragment of textFragments) {
                         this.execCommand('insertText', textFragment);

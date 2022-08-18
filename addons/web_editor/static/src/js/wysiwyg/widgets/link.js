@@ -198,7 +198,7 @@ const Link = Widget.extend({
             href: data.url,
             target: data.isNewWindow ? '_blank' : '',
         });
-        if (data.classes) {
+        if (typeof data.classes === "string") {
             data.classes = data.classes.replace(/o_default_snippet_text/, '');
             attrs.class = `${data.classes}`;
         }
@@ -482,6 +482,9 @@ const Link = Widget.extend({
         let isLink = value.indexOf('@') < 0;
         this.$('input[name="is_new_window"]').closest('.form-group').toggleClass('d-none', !isLink);
         this.$('.o_strip_domain').toggleClass('d-none', value.indexOf(window.location.origin) !== 0);
+        this.options.wysiwyg && this.options.wysiwyg.odooEditor.historyPauseSteps('_onURLInput');
+        this._adaptPreview();
+        this.options.wysiwyg && this.options.wysiwyg.odooEditor.historyUnpauseSteps('_onURLInput');
     },
     _onURLInputChange: function () {
         this._adaptPreview();

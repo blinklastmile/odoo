@@ -3752,7 +3752,7 @@ msgid ""
 "It is not possible to unreserve more products of %s than you have in stock."
 msgstr ""
 "Het is niet mogelijk om de reservering ongedaan te maken voor meer producten"
-" van %s dan je op voorraad heeft."
+" van %s dan je op voorraad hebt."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_picking__move_type
@@ -7805,7 +7805,7 @@ msgstr "De naam van het magazijn moet uniek zijn per bedrijf!"
 #. module: stock
 #: code:addons/stock/wizard/stock_assign_serial_numbers.py:0
 #, python-format
-msgid "The number of Serial Numbers to generate must greater than zero."
+msgid "The number of Serial Numbers to generate must be greater than zero."
 msgstr "Het aantal te genereren serienummers moet groter zijn dan nul."
 
 #. module: stock

@@ -1645,7 +1645,7 @@ msgstr ""
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_picking_type__count_picking_draft
 msgid "Count Picking Draft"
-msgstr "Contează proiectul de culegere"
+msgstr "Număr Ridicări Ciornă"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_picking_type__count_picking_late
@@ -2639,7 +2639,7 @@ msgstr ""
 #: code:addons/stock/models/stock_picking.py:0
 #, python-format
 msgid "Exp %s"
-msgstr "Exp %s"
+msgstr "Estimat %s"
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__stock_picking__products_availability_state__expected
@@ -2649,7 +2649,7 @@ msgstr "Estimat"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.report_reception_body
 msgid "Expected Delivery:"
-msgstr ""
+msgstr "Livrare estimată:"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_res_config_settings__module_product_expiry
@@ -3336,7 +3336,7 @@ msgstr "Dată intrare"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.report_product_product_replenishment
 msgid "Incoming Draft Transfer"
-msgstr "Transfer de proiect primit"
+msgstr "Transfer de intrare ciornă"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_location__incoming_move_line_ids
@@ -4983,7 +4983,7 @@ msgstr "Ieșiri"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.report_product_product_replenishment
 msgid "Outgoing Draft Transfer"
-msgstr "Transfer de proiect de ieșire"
+msgstr "Transfer de ieșire ciornă "
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_location__outgoing_move_line_ids
@@ -7555,6 +7555,9 @@ msgid ""
 "\n"
 "Is this expected? For example this can occur if a delivery operation is validated before its corresponding receipt operation is validated. In this case the issue will be solved automatically once all steps are completed. Otherwise, the serial number should be corrected to prevent inconsistent data."
 msgstr ""
+"Numărul de serie (%s) este deja folosit în aceste locații:%s .\n"
+"\n"
+"Este de așteptat acest lucru? De exemplu, acest lucru se poate întâmpla dacă o operațiune de livrare este validată înainte ca operațiunea de primire corespunzătoare să fie validată. În acest caz, problema va fi rezolvată automat odată ce toți pașii sunt finalizați. În caz contrar, numărul de serie ar trebui corectat pentru a preveni datele inconsecvente."
 
 #. module: stock
 #: code:addons/stock/models/stock_picking.py:0
@@ -7618,6 +7621,8 @@ msgid ""
 "The expected date of the created transfer will be computed based on this "
 "lead time."
 msgstr ""
+"Data estimată a transferului creat va fi calculată pe baza acestui termen de"
+" livrare."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_package_type__sequence
@@ -7650,8 +7655,8 @@ msgstr "Denumirea depozitului trebuie să fie unică pentru fiecare companie!"
 #. module: stock
 #: code:addons/stock/wizard/stock_assign_serial_numbers.py:0
 #, python-format
-msgid "The number of Serial Numbers to generate must greater than zero."
-msgstr "Numărul de numere seriale de generat trebuie să fie mai mare de zero."
+msgid "The number of Serial Numbers to generate must be greater than zero."
+msgstr ""
 
 #. module: stock
 #: model_terms:ir.actions.act_window,help:stock.stock_picking_type_action
