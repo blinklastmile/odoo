@@ -5,11 +5,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 STAGING = PROD = DEV = LOCAL = False
 
-if Path(os.path.join(os.path.dirname(BASE_DIR), 'init', 'staging_check_file')).is_file():
+if Path(os.path.join(os.path.dirname(BASE_DIR), '..', '..', 'init', 'staging_check_file')).is_file():
     STAGING = True
-elif Path(os.path.join(os.path.dirname(BASE_DIR), 'init', 'prod_check_file')).is_file():
+elif Path(os.path.join(os.path.dirname(BASE_DIR), '..', '..', 'init', 'prod_check_file')).is_file():
     PROD = True
-elif Path(os.path.join(os.path.dirname(BASE_DIR), 'init', 'dev_check_file')).is_file():
+elif Path(os.path.join(os.path.dirname(BASE_DIR), '..', '..', 'init', 'dev_check_file')).is_file():
     DEV = True
 else:
     LOCAL = True
