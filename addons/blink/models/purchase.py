@@ -33,11 +33,25 @@ class PurchaseOrder(models.Model):
                 # on_hand = product_tmpl['qty_available']
                 forecasted = product_tmpl['virtual_available']
                 if min_qty <= forecasted < max_qty:
+                    move = self.env['stock.move'].create({
+                        'name': self.order_line[0].move_dest_ids.name,
+                        'location_id': self.order_line[0].move_dest_ids.location_id.id,
+                        'location_dest_id': self.order_line[0].move_dest_ids.location_dest_id.id,
+                        'product_id': product_tmpl['product_variant_id'].id,
+                        'product_uom': product_tmpl['product_variant_id'].uom_id.id,
+                        'product_uom_qty': max_qty-forecasted,
+                        'rule_id': self.order_line[0].move_dest_ids.rule_id.id,
+                        'picking_id': self.order_line[0].move_dest_ids.picking_id.id
+                    })
+                    move._action_confirm()
+                    move._action_assign()
+                    self.order_line[0].move_dest_ids.picking_id.state = 'waiting'
                     purchase_order.order_line.create({
                         'order_id': self.ids[0],
                         'product_id': product_tmpl['product_variant_id'].id,  # some product.product ID,
                         'product_qty': max_qty-forecasted,
                         'price_unit': product_tmpl['price'],
+                        'move_dest_ids': move
                     })
             except Exception as e:
                 _logger.exception(e)
