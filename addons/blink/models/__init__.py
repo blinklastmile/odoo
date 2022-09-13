@@ -6,4 +6,5 @@ from . import stock
 from . import purchase
 from . import package
 from . import user
+from . import partner
 
