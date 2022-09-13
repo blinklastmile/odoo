@@ -28,7 +28,7 @@ class StockPicking(models.Model):
     @api.depends('move_line_ids')
     def set_tutorial_url(self):
         for rec in self:
-            pass
+            rec.tutorial_url = None
             # To do
             # tutorial_url must be dependent on products' vendor's custom_packaging_tutorial_url.
             # As stock.picking as default is not related to vendor, since sale lines can be collection of products
