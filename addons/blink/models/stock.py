@@ -18,11 +18,28 @@ class StockPicking(models.Model):
     first_order = fields.Boolean(related="sale_id.first_order", string='First Order')
     external_delivery_id = fields.Char(related="sale_id.external_delivery_id", string="External id")
     delivery_url = fields.Char(string="Delivery label", compute="set_delivery_url")
+    tutorial_url = fields.Char(string="Tutorial url", compute="set_tutorial_url")
 
     @api.depends('external_delivery_id')
     def set_delivery_url(self):
         for rec in self:
             rec.delivery_url = get_delivery_url(rec.external_delivery_id)
+
+    @api.depends('move_line_ids')
+    def set_tutorial_url(self):
+        for rec in self:
+            rec.tutorial_url = None
+            # To do
+            # tutorial_url must be dependent on products' vendor's custom_packaging_tutorial_url.
+            # As stock.picking as default is not related to vendor, since sale lines can be collection of products
+            #  from multiple vendors
+            # So, the solution is to get vendor, from the move_line
+
+            # This doesn't work
+            # if rec.move_line_ids:
+            #     rec.tutorial_url = rec.move_line_ids[0].owner_id.custom_packaging_tutorial_url
+            # else:
+            #     rec.tutorial_url = None
 
     def action_sync_packages(self):
         stock_picking = super(StockPicking, self)
