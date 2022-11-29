@@ -12,6 +12,7 @@ class SaleOrder(models.Model):
     first_order = fields.Boolean('First Order',default=False)
     source = fields.Char(string='Source')
     external_delivery_id = fields.Char(string="External id")
+    packing_tutorial = fields.Char(string="Packing Tutorial")
     delivery_url = fields.Char(string="Delivery label", compute="set_delivery_url")
 
     @api.depends('external_delivery_id')
