@@ -17,6 +17,7 @@ class StockPicking(models.Model):
     deliv_label = fields.Char(related="sale_id.deliv_label", string="Label")
     first_order = fields.Boolean(related="sale_id.first_order", string='First Order')
     external_delivery_id = fields.Char(related="sale_id.external_delivery_id", string="External id")
+    packing_tutorial = fields.Char(related="sale_id.packing_tutorial", string="Packing tutorial")
     delivery_url = fields.Char(string="Delivery label", compute="set_delivery_url")
 
     @api.depends('external_delivery_id')
