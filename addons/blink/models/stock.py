@@ -113,3 +113,7 @@ class StockPicking(models.Model):
             self.env.user.refresh_token = response['refresh_token']
             return 200
         _logger.debug("Request body: {}".format(request_body))
+class StockMoveLine(models.Model):
+    _inherit = 'stock.move.line'
+
+    barcode = fields.Char(related="product_id.barcode", string="Barcode")
